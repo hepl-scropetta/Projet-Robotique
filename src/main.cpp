@@ -72,7 +72,7 @@ setup_qtr();
 }
 void loop ()
 {
-    angle(get_angle(), ptr_pwmLeft,  ptr_pwmRight );
+    angle(get_angle(20), ptr_pwmLeft,  ptr_pwmRight );
     forward(pwmLeft,pwmRight );
 
 /*  //analogWrite(mForward_left, 100); 
