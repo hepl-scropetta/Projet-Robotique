@@ -21,35 +21,30 @@ pinMode(mForward_left, OUTPUT);
 pinMode(mForward_right, OUTPUT);
 }
 
-void angle (uint8_t angle, uint8_t *ptr_pwmLeft, uint8_t *ptr_pwmRight) //Valeur de l'angle entre 0 et 180, 90 = tout droit
-{
-  
-    
-    uint8_t pwmMax = 100, pwmMin = 0; 
+//Valeur de l'angle entre 0 et 180, 90 = tout droit
+void angle (uint8_t angle, uint8_t *ptr_pwmLeft, uint8_t *ptr_pwmRight){
+    uint8_t pwmMax = 70, pwmMin = 0; 
     int8_t erreur = angle - 90 ;
-    
-
-    if (erreur == 0) {
+    if (erreur <= 1 && erreur >= -1) {
     *ptr_pwmLeft = pwmMax;
     *ptr_pwmRight = pwmMax;
     }
     else if (erreur < 0)
     {
-        *ptr_pwmRight = pwmMax;
-        *ptr_pwmLeft = pwmMax + (erreur * pwmMax / 90);
-        Serial.println (pwmLeft); 
+        uint8_t ratio = map(erreur, -1, -90, 1, 10);
+        *ptr_pwmRight = pwmMax*(1 + (ratio/10));
+        *ptr_pwmLeft = (pwmMax + (erreur * pwmMax / 90)/2);
     }
-
     else if (erreur > 0 )
     {
-        
-        *ptr_pwmLeft = pwmMax;
-        *ptr_pwmRight = pwmMax - (erreur * pwmMax / 90);
-        Serial.println (pwmRight); 
+        uint8_t ratio = map(erreur, 1, 90, 1, 10);
+        *ptr_pwmLeft = pwmMax*(1 + (ratio/10));
+        *ptr_pwmRight = (pwmMax - (erreur * pwmMax / 90)/2);
     }
- }
+}
 
 
+//  forward(pwmLeft,pwmRight );
 void forward (uint8_t L, uint8_t R)
 {
     Serial.print(" ");
