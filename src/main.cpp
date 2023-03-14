@@ -14,7 +14,7 @@ pinMode(mForward_left, OUTPUT);
 pinMode(mForward_right, OUTPUT);
 
 setup_qtr();
-setup_Driver_moteur ();
+setup_Driver_moteur();
 
     
 }
@@ -22,6 +22,7 @@ void loop ()
 {
     angle(get_angle(20), ptr_pwmLeft,  ptr_pwmRight );
     forward(pwmLeft,pwmRight );
+    Serial.println("");
 
 /*  //analogWrite(mForward_left, 100); 
  while(Serial.available() > 0) {
