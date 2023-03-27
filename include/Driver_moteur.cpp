@@ -10,15 +10,13 @@ uint8_t *ptr_pwmRight = &pwmRight;
 uint8_t incomingByte = 0 ;
 uint8_t L, R = 0;
 
-
-
 void setup_Driver_moteur ()
 {
-Serial.begin (9600);
-pinMode(mBackward_left, OUTPUT);
-pinMode(mBackward_right, OUTPUT);
-pinMode(mForward_left, OUTPUT);
-pinMode(mForward_right, OUTPUT);
+    Serial.begin (9600);
+    pinMode(mBackward_left, OUTPUT);
+    pinMode(mBackward_right, OUTPUT);
+    pinMode(mForward_left, OUTPUT);
+    pinMode(mForward_right, OUTPUT);
 }
 
 //Valeur de l'angle entre 0 et 180, 90 = tout droit
@@ -36,11 +34,11 @@ void angle (uint8_t angle, uint8_t *ptr_pwmLeft, uint8_t *ptr_pwmRight){
     {
         if(erreur > -45){
             *ptr_pwmRight = (pwmMax - (erreur * (pwmMax - pwmMin) / 90));
-            *ptr_pwmLeft = (pwmMax  + (erreur * (pwmMax - pwmMin) / 90));
+            *ptr_pwmLeft = (pwmMax  + (erreur * (pwmMax - pwmMin) / 90))*0;
         }
         else{
-            *ptr_pwmRight = (pwmMax - (erreur * (pwmMax - pwmMin) / 90))*1.8f;
-            *ptr_pwmLeft = (pwmMax  + (erreur * (pwmMax - pwmMin) / 90))/1.8f;
+            *ptr_pwmRight = (pwmMax - (erreur * (pwmMax - pwmMin) / 90))*1.5f;
+            *ptr_pwmLeft = (pwmMax  + (erreur * (pwmMax - pwmMin) / 90))*0;
         }
         Serial.print ("pwm left =");
         Serial.print (pwmLeft);
@@ -49,11 +47,11 @@ void angle (uint8_t angle, uint8_t *ptr_pwmLeft, uint8_t *ptr_pwmRight){
     {
         if(erreur < 45){
             *ptr_pwmLeft = (pwmMax  + (erreur * (pwmMax - pwmMin) / 90));
-            *ptr_pwmRight = (pwmMax - (erreur * (pwmMax - pwmMin) / 90));
+            *ptr_pwmRight = (pwmMax - (erreur * (pwmMax - pwmMin) / 90))*0;
         }
         else{
-            *ptr_pwmLeft = (pwmMax  + (erreur * (pwmMax - pwmMin) / 90))*1.8f;
-            *ptr_pwmRight = (pwmMax - (erreur * (pwmMax - pwmMin) / 90))/1.8f;
+            *ptr_pwmLeft = (pwmMax  + (erreur * (pwmMax - pwmMin) / 90))*1.5f;
+            *ptr_pwmRight = (pwmMax - (erreur * (pwmMax - pwmMin) / 90))*0;
         }
         
     }

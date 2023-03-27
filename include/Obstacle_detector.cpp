@@ -5,26 +5,18 @@
 #define echo 23  
 UltraSonicDistanceSensor distanceSensor (trig, echo);     
 
-void obstacle ()
+void setup_hcsr() {
+  pinMode (trig, OUTPUT);
+  pinMode (echo, INPUT);
+  Serial.begin (9600);
+}
+
+float obstacle_hcsr()
 {
   float distance = distanceSensor.measureDistanceCm();
   Serial.print ("distance = ");
   Serial.print (distance);
   Serial.println (" cm");
+  return distance;
 }
-
-void setup() {
-  // put your setup code here, to run once:
-pinMode (trig, OUTPUT);
-pinMode (echo, INPUT);
-Serial.begin (9600);
-}
-
-void loop() {
-  
-  // put your main code here, to run repeatedly:
-obstacle ();
-delay (500);
-}
-
 
