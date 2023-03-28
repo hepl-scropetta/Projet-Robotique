@@ -22,10 +22,19 @@ void setup ()
 void loop ()
 {
     angle(get_angle(20), ptr_pwmLeft,  ptr_pwmRight );
-    if(true){
+    delay(500);
+    if(obstacle_hcsr()>5)
+    {
+        Serial.print(obstacle_hcsr());
+        Serial.print("Right = ");
+        Serial.print(pwmRight);
+        Serial.print("- Left = ");
+        Serial.println(pwmLeft);
         forward(pwmLeft,pwmRight);
     }
-    else{
+    else
+    {
+        Serial.print(obstacle_hcsr());
         forward(0,0);
     }
     Serial.println("");

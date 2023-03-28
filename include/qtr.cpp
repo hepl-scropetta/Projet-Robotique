@@ -30,6 +30,8 @@ int8_t get_angle(uint8_t nb_moyenne) {
   int16_t sum_angle = 0;
   for (int i = 0; i < nb_moyenne; i++){
     position = qtr.readLineWhite(sensorValues);
+    //Serial.print (" position :");
+    //Serial.print (position);
     angle_value = map(position, 0, 2000, 0, 180);
     sum_angle =+ angle_value;
     }
