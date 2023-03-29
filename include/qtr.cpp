@@ -27,16 +27,11 @@ void setup_qtr() {
 // Return int8_t
 int8_t get_angle(uint8_t nb_moyenne) {
   uint16_t position = 0;
-  int16_t sum_angle = 0;
-  for (int i = 0; i < nb_moyenne; i++){
-    position = qtr.readLineWhite(sensorValues);
-    //Serial.print (" position :");
-    //Serial.print (position);
-    angle_value = map(position, 0, 2000, 0, 180);
-    sum_angle =+ angle_value;
-    }
-    uint16_t avg = sum_angle/nb_moyenne;
-    Serial.print("angle: ");
-    Serial.print(angle_value);
-    return angle_value;
+  position = qtr.readLineWhite(sensorValues);
+  //Serial.print (" position ");
+  //Serial.print(position);
+  angle_value = map(position, 0, 2000, 0, 180);
+  //Serial.print(" angle ");
+  //Serial.print(angle_value);
+  return angle_value;
 }

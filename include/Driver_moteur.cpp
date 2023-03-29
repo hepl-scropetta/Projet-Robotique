@@ -22,11 +22,9 @@ void setup_Driver_moteur ()
 //Valeur de l'angle entre 0 et 180, 90 = tout droit
 void angle (uint8_t angle, uint8_t *ptr_pwmLeft, uint8_t *ptr_pwmRight){
 
-    Serial.print (" - ");
-
     uint8_t pwmMax = 70, pwmMin = 0; 
     int8_t erreur = angle - 90 ;
-    if (erreur <= 3 && erreur >= -3) {
+    if (erreur <= 5 && erreur >= -5) {
     *ptr_pwmLeft = pwmMax*0.7;
     *ptr_pwmRight = pwmMax*0.7;
     }
@@ -37,7 +35,7 @@ void angle (uint8_t angle, uint8_t *ptr_pwmLeft, uint8_t *ptr_pwmRight){
             *ptr_pwmLeft = (pwmMax  + (erreur * (pwmMax - pwmMin) / 90))*0;
         }
         else{
-            *ptr_pwmRight = (pwmMax - (erreur * (pwmMax - pwmMin) / 90))/**1.3f*/;
+            *ptr_pwmRight = (pwmMax - (erreur * (pwmMax - pwmMin) / 90))/*1.3f*/;
             *ptr_pwmLeft = (pwmMax  + (erreur * (pwmMax - pwmMin) / 90))*0;
         }
         
@@ -49,7 +47,7 @@ void angle (uint8_t angle, uint8_t *ptr_pwmLeft, uint8_t *ptr_pwmRight){
             *ptr_pwmRight = (pwmMax - (erreur * (pwmMax - pwmMin) / 90))*0;
         }
         else{
-            *ptr_pwmLeft = (pwmMax  + (erreur * (pwmMax - pwmMin) / 90))/**1.3f*/;
+            *ptr_pwmLeft = (pwmMax  + (erreur * (pwmMax - pwmMin) / 90))/*1.3f*/;
             *ptr_pwmRight = (pwmMax - (erreur * (pwmMax - pwmMin) / 90))*0;
         }
         
@@ -58,7 +56,7 @@ void angle (uint8_t angle, uint8_t *ptr_pwmLeft, uint8_t *ptr_pwmRight){
 
 
 //  forward(pwmLeft,pwmRight );
-void forward (uint8_t L, uint8_t R)
+void forward (uint8_t L, uint8_t R, bool dir)
 {
     if(L==0 && R==0){
         for (float i = 0.1 ; i<1; i = i +0.1)
@@ -67,11 +65,11 @@ void forward (uint8_t L, uint8_t R)
             uint8_t newL = L * (i);
             analogWrite (mForward_left, newL);
             analogWrite (mForward_right, newR);
-            delay (200);
+            //delay (200);
         }
     }
-digitalWrite(mBackward_left, LOW);
-digitalWrite(mBackward_right, LOW);
+digitalWrite(mBackward_left, dir);
+digitalWrite(mBackward_right, dir);
 analogWrite (mForward_left, L);
 analogWrite (mForward_right, R);
 }

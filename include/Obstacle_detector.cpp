@@ -14,9 +14,6 @@ void setup_hcsr() {
 float obstacle_hcsr()
 {
   float distance = distanceSensor.measureDistanceCm();
-  Serial.print ("distance = ");
-  Serial.print (distance);
-  Serial.println (" cm");
   return distance;
 }
 
