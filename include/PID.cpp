@@ -17,9 +17,9 @@ void PID(uint8_t angle_read) {
   int target = 90;
 
   // PID constants
-  float kp = 0.5;
-  float kd = 0.025;
-  float ki = 0.0;
+  float kp = 1.0f;
+  float kd = 0.05f;
+  float ki = 0.0f;
 
   // time difference
   long currT = micros();
@@ -43,11 +43,17 @@ void PID(uint8_t angle_read) {
 
   Serial.print(0);
   Serial.print(" ");
-  Serial.print(u);
+  //Serial.print(u);
 }
 
 int16_t get_pwm(){
-  int16_t pwmOutput = map(u, -90, 90, -150, 150);
+  int16_t pwmOutput = map(u, -90, 90, -80, 80);
+  if(pwmOutput < -80){
+    pwmOutput = -80;
+  }
+  if(pwmOutput > 80){
+    pwmOutput = 80;
+  }
+  Serial.print(pwmOutput);
   return pwmOutput;
-
 }

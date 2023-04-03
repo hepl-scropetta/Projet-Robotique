@@ -34,20 +34,20 @@ void loop ()
     angle(angle_read, ptr_pwmLeft,  ptr_pwmRight );
     PID(angle_read);
     pwmOutput = get_pwm();
-    uint8_t pwmL = 0;
-    uint8_t pwmR = 0;
-    if(pwmOutput < 0){
-        pwmL = abs(pwmOutput);
+    uint8_t pwmL = 50;
+    uint8_t pwmR = 50;
+    if(pwmOutput < -25){
+        pwmL = abs(pwmOutput) + 38;
         pwmR = 0;
-        forward(pwmL, pwmR, false);
+        //forward(pwmL, pwmR, false);
     }
-    else if(pwmOutput > 0){
-        pwmR = abs(pwmOutput);
+    else if(pwmOutput > 25){
+        pwmR = abs(pwmOutput) + 38;
         pwmL = 0;
-        forward(pwmL, pwmR, false);
+        //forward(pwmL, pwmR, false);
     }
-    else
-    {forward(pwmL+40, pwmR+40, false);}
+    
+    forward(pwmL, pwmR, false);
     
 
     millisActual = millis();
@@ -56,7 +56,7 @@ void loop ()
         millisPass = millisActual;
     }
     //delay(250);
-
+    /*
     if(distanceObstacle>15 && distanceObstacle != -1)
     {
         Serial.print(distanceObstacle);
@@ -78,5 +78,6 @@ void loop ()
     {
         //forward(0,0);
     }
+    */
     Serial.println("");
 }

@@ -12,6 +12,7 @@ void setup_qtr() {
   qtr.setTypeAnalog();
   qtr.setSensorPins((const uint8_t[]){A0, A1, A2}, 3);
 
+
   delay(500);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN,HIGH);
@@ -27,7 +28,7 @@ void setup_qtr() {
 // Return int8_t
 int8_t get_angle(uint8_t nb_moyenne) {
   uint16_t position = 0;
-  position = qtr.readLineWhite(sensorValues);
+  position = qtr.readLineBlack(sensorValues);
   //Serial.print (" position ");
   //Serial.print(position);
   angle_value = map(position, 0, 2000, 0, 180);
