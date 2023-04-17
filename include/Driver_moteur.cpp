@@ -56,8 +56,9 @@ void angle (uint8_t angle, uint8_t *ptr_pwmLeft, uint8_t *ptr_pwmRight){
 
 
 //  forward(pwmLeft,pwmRight );
-void forward (uint8_t L, uint8_t R, bool dir)
+void forward (uint8_t L, uint8_t R, uint8_t rev_L, uint8_t rev_R)
 {
+    /*
     if(L==0 && R==0){
         for (float i = 0.1 ; i<1; i = i +0.1)
         {
@@ -68,9 +69,10 @@ void forward (uint8_t L, uint8_t R, bool dir)
             //delay (200);
         }
     }
-digitalWrite(mBackward_left, dir);
-digitalWrite(mBackward_right, dir);
+    */
 analogWrite (mForward_left, L);
 analogWrite (mForward_right, R);
+analogWrite(mBackward_left, rev_L);
+analogWrite(mBackward_right, rev_R);
 }
 

@@ -14,6 +14,7 @@ uint16_t millisActual = 0;
 float distanceObstacle;
 uint8_t angle_read;
 
+#define speed 75
 int16_t pwmOutput = 0;
 
 void setup ()
@@ -30,24 +31,47 @@ void setup ()
 }
 void loop ()
 {
-    angle_read = get_angle(1);
-    angle(angle_read, ptr_pwmLeft,  ptr_pwmRight );
+    angle_read = get_angle();
+    //angle(angle_read, ptr_pwmLeft,  ptr_pwmRight );
     PID(angle_read);
     pwmOutput = get_pwm();
-    uint8_t pwmL = 50;
-    uint8_t pwmR = 50;
-    if(pwmOutput < -25){
-        pwmL = abs(pwmOutput) + 38;
-        pwmR = 0;
-        //forward(pwmL, pwmR, false);
+    //pwmOutput = 120;
+    int16_t pwmL = speed;
+    int16_t pwmR = speed;
+    //---------------------- Tournant à droite ----------------------------
+    if(pwmOutput < 0){
+        pwmL = abs(pwmOutput) + speed;
+        pwmR = speed - (abs(pwmOutput));
+        if(pwmR >= 0){
+            forward(pwmL, pwmR, LOW, LOW);
+        }
+        else{
+            pwmL = pwmL - abs(pwmOutput)*0.5f;
+            pwmR = pwmR - abs(pwmOutput)*3.0f;
+            forward(pwmL, LOW, LOW, abs(pwmR));
+            }
     }
-    else if(pwmOutput > 25){
-        pwmR = abs(pwmOutput) + 38;
-        pwmL = 0;
-        //forward(pwmL, pwmR, false);
+    // --------------------- Tournant à gauche ---------------------------
+    else if(pwmOutput > 0){
+        pwmR = abs(pwmOutput) + speed;
+        pwmL = speed - (abs(pwmOutput));
+        if(pwmL >= 0){
+            forward(pwmL, pwmR, LOW, LOW);
+        }
+        else{
+            pwmR = pwmR - abs(pwmOutput)*0.5f;
+            pwmL = pwmL - abs(pwmOutput)*3.0f;
+            forward(LOW, pwmR, abs(pwmL), LOW);
+            }
     }
-    
-    forward(pwmL, pwmR, false);
+    else{forward(pwmL, pwmR, LOW, LOW);
+    }
+
+    Serial.print(" ");
+    Serial.print(pwmL);
+    Serial.print(" ");
+    Serial.print(pwmR);
+    Serial.print(" ");
     
 
     millisActual = millis();
