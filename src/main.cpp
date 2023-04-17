@@ -6,6 +6,7 @@
 #include <SoftwareSerial.h>
 #include "bluetooth.h"
 #include <PID.cpp>
+#include <Audio.cpp>
 
 #define interval 500
 uint16_t millisPass = 0;
@@ -25,9 +26,12 @@ void setup ()
     pinMode(mForward_left, OUTPUT);
     pinMode(mForward_right, OUTPUT);
 
+    setup_audio();
+    audio_config ();
     setup_qtr();
     setup_Driver_moteur();
     setup_hcsr();
+    
 }
 void loop ()
 {
