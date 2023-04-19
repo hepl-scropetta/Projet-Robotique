@@ -13,10 +13,10 @@ void setup_qtr() {
   qtr.setSensorPins((const uint8_t[]){A0, A1, A2}, 3);
 
 
-  delay(500);
+  delay(100);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN,HIGH);
-  for (uint16_t i = 0; i < 400; i++)
+  for (uint16_t i = 0; i < 250; i++)
   {
     qtr.calibrate();
   }

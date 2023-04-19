@@ -27,10 +27,13 @@ void setup ()
     pinMode(mForward_right, OUTPUT);
 
     setup_audio();
-    audio_config ();
+    audio_config();
     setup_qtr();
     setup_Driver_moteur();
     setup_hcsr();
+    delay(500);
+    audio_start();
+    delay(5000);
     
 }
 void loop ()
