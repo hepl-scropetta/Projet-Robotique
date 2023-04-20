@@ -7,6 +7,7 @@
 #include "bluetooth.h"
 #include <PID.cpp>
 #include <Audio.cpp>
+#define BUTTON_PIN 30
 
 #define interval 500
 uint16_t millisPass = 0;
@@ -15,11 +16,14 @@ uint16_t millisActual = 0;
 float distanceObstacle;
 uint8_t angle_read;
 
-#define speed 75
+#define speed 60
 int16_t pwmOutput = 0;
-
 void setup ()
 {
+    pinMode (BUTTON_PIN, INPUT_PULLUP);
+    DefineMode (digitalRead (BUTTON_PIN));
+    
+
     Serial.begin (9600);
     pinMode(mBackward_left, OUTPUT);
     pinMode(mBackward_right, OUTPUT);
@@ -34,10 +38,15 @@ void setup ()
     delay(500);
     audio_start();
     delay(5000);
+    setup_volume() ;
+     
+    //audio_motor_go();
+    //delay(500);
     
+      
 }
 void loop ()
-{
+{ 
     angle_read = get_angle();
     //angle(angle_read, ptr_pwmLeft,  ptr_pwmRight );
     PID(angle_read);
@@ -47,12 +56,14 @@ void loop ()
     int16_t pwmR = speed;
     //---------------------- Tournant à droite ----------------------------
     if(pwmOutput < 0){
+        audio_motor ();
         pwmL = abs(pwmOutput) + speed;
         pwmR = speed - (abs(pwmOutput));
         if(pwmR >= 0){
             forward(pwmL, pwmR, LOW, LOW);
         }
         else{
+            audio_drift ();
             pwmL = pwmL - abs(pwmOutput)*0.5f;
             pwmR = pwmR - abs(pwmOutput)*3.0f;
             forward(pwmL, LOW, LOW, abs(pwmR));
@@ -60,12 +71,14 @@ void loop ()
     }
     // --------------------- Tournant à gauche ---------------------------
     else if(pwmOutput > 0){
+        audio_motor ();
         pwmR = abs(pwmOutput) + speed;
         pwmL = speed - (abs(pwmOutput));
         if(pwmL >= 0){
             forward(pwmL, pwmR, LOW, LOW);
         }
         else{
+            audio_drift ();
             pwmR = pwmR - abs(pwmOutput)*0.5f;
             pwmL = pwmL - abs(pwmOutput)*3.0f;
             forward(LOW, pwmR, abs(pwmL), LOW);
@@ -73,13 +86,13 @@ void loop ()
     }
     else{forward(pwmL, pwmR, LOW, LOW);
     }
-
+/*
     Serial.print(" ");
     Serial.print(pwmL);
     Serial.print(" ");
     Serial.print(pwmR);
     Serial.print(" ");
-    
+*/    
 
     millisActual = millis();
     if(millisActual - interval > millisPass){
@@ -110,5 +123,5 @@ void loop ()
         //forward(0,0);
     }
     */
-    Serial.println("");
+   // Serial.println("");
 }
