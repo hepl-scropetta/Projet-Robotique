@@ -56,8 +56,13 @@ void angle (uint8_t angle, uint8_t *ptr_pwmLeft, uint8_t *ptr_pwmRight){
 
 
 //  forward(pwmLeft,pwmRight );
-void forward (uint8_t L, uint8_t R, uint8_t rev_L, uint8_t rev_R)
+void forward (uint8_t L, uint8_t R, uint8_t rev_L, uint8_t rev_R, uint8_t percent)
 {
+    L = (L * percent) / 100;
+    R = (R * percent) / 100;
+    rev_L = (rev_L * percent) / 100;
+    rev_R = (rev_R * percent) / 100;
+
     /*
     if(L==0 && R==0){
         for (float i = 0.1 ; i<1; i = i +0.1)
@@ -76,3 +81,7 @@ analogWrite(mBackward_left, rev_L);
 analogWrite(mBackward_right, rev_R);
 }
 
+void stop ()
+{
+    forward (0,0,0,0,0);
+}
