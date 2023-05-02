@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "${workspaceFolder}/.pio/libdeps/megaatmega2560/Unity"
+    "cmake.configureOnOpen": true,
+    "cmake.cmakePath": "cmake"
 }

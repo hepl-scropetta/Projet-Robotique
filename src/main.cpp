@@ -83,14 +83,13 @@ void loop ()
     uint16_t timeMillis = millis();
     if (millisFirstZero != 0 && (timeMillis - 100) >= millisFirstZero){
         //------------- Demi-tour --------------
-        forward(0, 0, LOW, LOW);
-        delay(200);
+        forward(0, 0, LOW, LOW, 0);
         millisFirstZero = 0;
         angle_demi = 0;
         while(angle_demi < 5)
         {
             angle_demi = PID(get_angle());
-            forward(LOW, 100, 130, LOW);
+            forward(LOW, 100, 130, LOW, 100);
         }
     }
 
@@ -152,12 +151,7 @@ void loop ()
     }
     else if (distanceObstacle != -1)
     {
-        
         *ptr_percent = 0;
         Serial.print("stop ");
-        
     }
-    
-    
-    
 }
