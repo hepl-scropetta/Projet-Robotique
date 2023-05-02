@@ -16,7 +16,7 @@ int16_t PID(uint8_t angle_read) {
   // set target position
   int target = 90;
   // PID constants
-  float kp = 1.1f;
+  float kp = 1.5f;
   float kd = 0.0f;
   float ki = 0.0f;
 

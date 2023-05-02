@@ -48,11 +48,11 @@ void loop ()
         pwmL = abs(pwmOutput) + speed;
         pwmR = speed - (abs(pwmOutput));
         if(pwmR >= 0){
-            forward(pwmL, pwmR, LOW, LOW,percent);
+            forward(pwmL, pwmR, LOW, LOW, percent);
         }
         else{
-            pwmL = pwmL - abs(pwmOutput)*0.5f;
-            pwmR = pwmR - abs(pwmOutput)*3.0f;
+            pwmL = pwmL - abs(pwmOutput)*2.5f;
+            pwmR = pwmR - abs(pwmOutput)*1.0f;
             forward(pwmL, LOW, LOW, abs(pwmR), percent);
             }
     }
@@ -64,8 +64,8 @@ void loop ()
             forward(pwmL, pwmR, LOW, LOW, percent);
         }
         else{
-            pwmR = pwmR - abs(pwmOutput)*0.5f;
-            pwmL = pwmL - abs(pwmOutput)*3.0f;
+            pwmR = pwmR - abs(pwmOutput)*2.5f;
+            pwmL = pwmL - abs(pwmOutput)*1.0f;
             forward(LOW, pwmR, abs(pwmL), LOW, percent);
             }
     }
@@ -81,15 +81,16 @@ void loop ()
         millisFirstZero = 0;
     }
     uint16_t timeMillis = millis();
-    if (millisFirstZero != 0 && (timeMillis - 100) >= millisFirstZero){
+    if (millisFirstZero != 0 && (timeMillis - 40) >= millisFirstZero){
         //------------- Demi-tour --------------
         forward(0, 0, LOW, LOW, 0);
+        delay(1000);
         millisFirstZero = 0;
         angle_demi = 0;
         while(angle_demi < 5)
         {
             angle_demi = PID(get_angle());
-            forward(LOW, 100, 130, LOW, 100);
+            forward(LOW, 120, 160, LOW, 100);
         }
     }
 
