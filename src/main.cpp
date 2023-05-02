@@ -11,38 +11,32 @@
 #define interval 500
 uint16_t millisPass = 0;
 uint16_t millisActual = 0;
+uint16_t millisFirstZero = 0;
 
 float distanceObstacle;
 uint8_t angle_read;
+int angle_demi;
 
-#define speed 75
+#define speed 60
 int16_t pwmOutput = 0;
 
 void setup ()
 {
-    Serial.begin (9600);
-    pinMode(mBackward_left, OUTPUT);
-    pinMode(mBackward_right, OUTPUT);
-    pinMode(mForward_left, OUTPUT);
-    pinMode(mForward_right, OUTPUT);
-
+    Serial.begin(9600);
     setup_audio();
     audio_config();
     setup_qtr();
     setup_Driver_moteur();
     setup_hcsr();
     delay(500);
-    audio_start();
-    delay(5000);
+    //audio_start();
+    //delay(5000);
     
 }
 void loop ()
 {
     angle_read = get_angle();
-    //angle(angle_read, ptr_pwmLeft,  ptr_pwmRight );
-    PID(angle_read);
-    pwmOutput = get_pwm();
-    //pwmOutput = 120;
+    pwmOutput = PID(angle_read);
     int16_t pwmL = speed;
     int16_t pwmR = speed;
     //---------------------- Tournant à droite ----------------------------
@@ -58,7 +52,7 @@ void loop ()
             forward(pwmL, LOW, LOW, abs(pwmR));
             }
     }
-    // --------------------- Tournant à gauche ---------------------------
+    // --------------------- Tournant à gauche ----------------------------
     else if(pwmOutput > 0){
         pwmR = abs(pwmOutput) + speed;
         pwmL = speed - (abs(pwmOutput));
@@ -74,41 +68,42 @@ void loop ()
     else{forward(pwmL, pwmR, LOW, LOW);
     }
 
+    //---------------------- Detection fin de parcour ---------------------
+
+    if(pwmOutput == 0 && millisFirstZero == 0){
+        millisFirstZero = millis();
+        }
+    if(pwmOutput != 0){
+        millisFirstZero = 0;
+    }
+    uint16_t timeMillis = millis();
+    if (millisFirstZero != 0 && (timeMillis - 100) >= millisFirstZero){
+        //------------- Demi-tour --------------
+        forward(0, 0, LOW, LOW);
+        delay(200);
+        millisFirstZero = 0;
+        angle_demi = 0;
+        while(angle_demi < 5)
+        {
+            angle_demi = PID(get_angle());
+            forward(LOW, 100, 130, LOW);
+        }
+    }
+
+    //------------------------- Debug Serial ------------------------------
+    Serial.print(0);
+    Serial.print(" ");
+    Serial.print(pwmOutput);
     Serial.print(" ");
     Serial.print(pwmL);
     Serial.print(" ");
     Serial.print(pwmR);
-    Serial.print(" ");
+    Serial.println("");
     
-
+    //---------------------- Dectection obstacle --------------------------
     millisActual = millis();
     if(millisActual - interval > millisPass){
         distanceObstacle = obstacle_hcsr();
         millisPass = millisActual;
-    }
-    //delay(250);
-    /*
-    if(distanceObstacle>15 && distanceObstacle != -1)
-    {
-        Serial.print(distanceObstacle);
-        Serial.print("Right ");
-        Serial.print(pwmRight);
-        Serial.print("Left ");
-        Serial.println(pwmLeft);
-        //forward(pwmLeft,pwmRight);
-    }
-    else if(distanceObstacle>8 && distanceObstacle != -1){
-        Serial.print(distanceObstacle);
-        Serial.print("Right = ");
-        Serial.print(pwmRight/2);
-        Serial.print("- Left = ");
-        Serial.println(pwmLeft/2);
-        //forward(pwmLeft/2,pwmRight/2);
-    }
-    else
-    {
-        //forward(0,0);
-    }
-    */
-    Serial.println("");
+    }  
 }

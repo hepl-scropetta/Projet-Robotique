@@ -11,7 +11,7 @@ float eprev = 0;
 float eintegral = 0;
 float u = 0;
 
-void PID(uint8_t angle_read) {
+int16_t PID(uint8_t angle_read) {
 
   // set target position
   int target = 90;
@@ -40,14 +40,11 @@ void PID(uint8_t angle_read) {
   // store previous error
   eprev = e;
 
-  Serial.print(0);
-  Serial.print(" ");
-  //Serial.print(e);
-  //Serial.print(" ");
+  int16_t pwmOutput = map(u, -90, 90, -90, 90);
+  return pwmOutput;
 }
 
 int16_t get_pwm(){
   int16_t pwmOutput = map(u, -90, 90, -90, 90);
-  Serial.print(pwmOutput);
   return pwmOutput;
 }

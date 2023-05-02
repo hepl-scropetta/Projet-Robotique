@@ -29,12 +29,8 @@ void setup_qtr() {
 int8_t get_angle() {
   uint16_t position = 0;
   position = qtr.readLineWhite(sensorValues);
-  //Serial.print (" position ");
-  //Serial.print(position);
 
   angle_value = map(position, 0, 2000, 0, 180);
   
-  //Serial.print(" angle ");
-  //Serial.print(angle_value);
   return angle_value;
 }
