@@ -40,14 +40,14 @@ void PID(uint8_t angle_read) {
   // store previous error
   eprev = e;
 
-  Serial.print(0);
-  Serial.print(" ");
+ // Serial.print(0);
+  //Serial.print(" ");
   //Serial.print(e);
   //Serial.print(" ");
 }
 
 int16_t get_pwm(){
   int16_t pwmOutput = map(u, -90, 90, -90, 90);
-  Serial.print(pwmOutput);
+  //Serial.print(pwmOutput);
   return pwmOutput;
 }
