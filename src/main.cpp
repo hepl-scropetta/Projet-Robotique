@@ -7,6 +7,7 @@
 #include "bluetooth.h"
 #include <PID.cpp>
 #include <Audio.cpp>
+#include <Servo.h>
 
 #define interval 500
 uint16_t millisPass = 0;
@@ -23,6 +24,9 @@ int16_t pwmOutput = 0;
 uint8_t percent = 0;
 uint8_t *ptr_percent = &percent;
 
+Servo servo_main;
+Servo servo_sec;
+
 
 void setup ()
 {
@@ -35,7 +39,16 @@ void setup ()
     delay(500);
     //audio_start();
     //delay(5000);
-    
+    servo_main.attach(4);
+    servo_sec.attach(3);
+    servo_main.write(90);
+    servo_sec.write(130);
+    delay(1000);
+    servo_main.write(130);
+    servo_sec.write(170);
+    delay(500);
+    servo_main.write(90);
+    servo_sec.write(130);
 }
 void loop ()
 {
@@ -81,17 +94,26 @@ void loop ()
         millisFirstZero = 0;
     }
     uint16_t timeMillis = millis();
-    if (millisFirstZero != 0 && (timeMillis - 40) >= millisFirstZero){
+    if (millisFirstZero != 0 && (timeMillis - 70) >= millisFirstZero){
         //------------- Demi-tour --------------
-        forward(0, 0, LOW, LOW, 0);
+        forward(0, 0, 50, 50, 100);
+        delay(200);
+        forward(0, 0, 0, 0, 100);
+        servo_main.write(130);
+        servo_sec.write(170);
         delay(1000);
+        servo_main.write(180);
+        servo_sec.write(130);
+        delay(500);
         millisFirstZero = 0;
         angle_demi = 0;
         while(angle_demi < 5)
         {
             angle_demi = PID(get_angle());
-            forward(LOW, 120, 160, LOW, 100);
+            forward(LOW, 150, 170, LOW, 100);
         }
+        servo_main.write(90);
+        servo_sec.write(130);
     }
 
     //------------------------- Debug Serial ------------------------------

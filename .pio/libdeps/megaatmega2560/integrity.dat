@@ -1,3 +1,4 @@
-pololu/QTRSensors@^4.0.0
+arduino-libraries/Servo@^1.1.8
 lib\HCSR04-2.0.0
+pololu/QTRSensors@^4.0.0
 lib\Android-with-Arduino-Bluetooth-master
