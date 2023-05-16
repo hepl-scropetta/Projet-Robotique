@@ -62,7 +62,7 @@ void setup ()
 void loop ()
 {
     angle_read = get_angle();
-    intervalLed = 0;
+    intervalLed = 10;
     pwmOutput = PID(angle_read);
     int16_t pwmL = speed;
     int16_t pwmR = speed;
@@ -120,6 +120,8 @@ void loop ()
         if(half_path_completed){
             while (true);
         }
+        audio_Reverse();
+        delay(2000);
         while(angle_demi < 5)
         {
             angle_demi = PID(get_angle());
@@ -172,10 +174,8 @@ void loop ()
         Serial.print (" ");
         Serial.println(distanceObstacle2);
     
-
     if(distanceObstacle>25 && distanceObstacle != -1)
     {
-        obstacle_stop = false;
         *ptr_percent = 100;
     }
 
@@ -186,7 +186,7 @@ void loop ()
 
 
     else if (distanceObstacle > 12 && distanceObstacle != -1){
-        *ptr_percent = 65;
+        *ptr_percent = 45;
     }
     else if (distanceObstacle != -1)
     {
@@ -203,7 +203,8 @@ void loop ()
     if(obstacle_stop){
         if(millisActual - 2000 > obstacle_stop_millis){
             obstacle_stop_millis = millisActual;
-            //<===================================================================== audio obstacle bloque le robot
+            audio_Obstacle();
+            obstacle_stop = false;
         }
     }
 
