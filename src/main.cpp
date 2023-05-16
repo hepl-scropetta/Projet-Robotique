@@ -20,7 +20,7 @@ uint16_t millisActualLed = 0;
 bool state_obs = 0 ;
 float distanceObstacle, distanceObstacle1, distanceObstacle2;
 bool obstacle_stop = false;
-uint16_t obstacle_stop_millis = 0;
+uint16_t obstacle_stop_millis = 1000;
 uint8_t angle_read;
 int angle_demi;
 bool half_path_completed = false;
@@ -118,6 +118,7 @@ void loop ()
         millisFirstZero = 0;
         angle_demi = 0;
         if(half_path_completed){
+            audio_Finish();
             while (true);
         }
         audio_Reverse();
@@ -199,8 +200,8 @@ void loop ()
     }
 
     //---------------------- Obstacle problem  --------------------------
-    millisActual = millis();
     if(obstacle_stop){
+        millisActual = millis();
         if(millisActual - 2000 > obstacle_stop_millis){
             obstacle_stop_millis = millisActual;
             audio_Obstacle();

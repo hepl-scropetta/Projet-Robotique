@@ -4,6 +4,7 @@ byte mario [6] = {0x7E, 0x04, 0x03, 0x00, 0x02, 0xEF};//6 sec
 byte Config [6] = {0x7E, 0x04, 0x03, 0x00, 0x03, 0xEF};//5 sec
 byte Reverse [6] = {0x7E, 0x04, 0x03, 0x00, 0x04, 0xEF};//5 sec
 byte Obstacle [6] = {0x7E, 0x04, 0x03, 0x00, 0x05, 0xEF};//5 sec
+byte Finish [6] = {0x7E, 0x04, 0x03, 0x00, 0x06, 0xEF};//5 sec
 
 
 
@@ -42,4 +43,10 @@ void audio_Obstacle ()
 {   
     Serial1.write(Volume22, sizeof(Volume22));
     Serial1.write(Obstacle, sizeof(Obstacle));
+}
+
+void audio_Finish ()
+{   
+    Serial1.write(Volume22, sizeof(Volume22));
+    Serial1.write(Finish, sizeof(Finish));
 }
