@@ -14,10 +14,16 @@ uint16_t millisPass = 0;
 uint16_t millisActual = 0;
 uint16_t millisFirstZero = 0;
 
+uint16_t millisPassLed = 0;
+uint16_t millisActualLed = 0;
+
 bool state_obs = 0 ;
 float distanceObstacle, distanceObstacle1, distanceObstacle2;
+bool obstacle_stop = false;
+uint16_t obstacle_stop_millis = 0;
 uint8_t angle_read;
 int angle_demi;
+bool half_path_completed = false;
 
 #define speed 60
 int16_t pwmOutput = 0;
@@ -27,6 +33,8 @@ uint8_t *ptr_percent = &percent;
 Servo servo_main;
 Servo servo_sec;
 
+#define LED_PIN 26
+int intervalLed = 1000;
 
 void setup ()
 {
@@ -49,10 +57,12 @@ void setup ()
     delay(500);
     servo_main.write(90);
     servo_sec.write(130);
+    pinMode(LED_PIN, OUTPUT);
 }
 void loop ()
 {
     angle_read = get_angle();
+    intervalLed = 0;
     pwmOutput = PID(angle_read);
     int16_t pwmL = speed;
     int16_t pwmR = speed;
@@ -107,10 +117,15 @@ void loop ()
         delay(500);
         millisFirstZero = 0;
         angle_demi = 0;
+        if(half_path_completed){
+            while (true);
+        }
         while(angle_demi < 5)
         {
             angle_demi = PID(get_angle());
+            intervalLed = 1000;
             forward(LOW, 150, 170, LOW, 100);
+            half_path_completed = true;
         }
         servo_main.write(90);
         servo_sec.write(130);
@@ -160,6 +175,7 @@ void loop ()
 
     if(distanceObstacle>25 && distanceObstacle != -1)
     {
+        obstacle_stop = false;
         *ptr_percent = 100;
     }
 
@@ -175,6 +191,31 @@ void loop ()
     else if (distanceObstacle != -1)
     {
         *ptr_percent = 0;
-        Serial.print("stop ");
+        if(!obstacle_stop){
+            obstacle_stop_millis = millis();
+            obstacle_stop = true;
+        }
+        intervalLed = 500;
+    }
+
+    //---------------------- Obstacle problem  --------------------------
+    millisActual = millis();
+    if(obstacle_stop){
+        if(millisActual - 2000 > obstacle_stop_millis){
+            obstacle_stop_millis = millisActual;
+            //<===================================================================== audio obstacle bloque le robot
+        }
+    }
+
+    //---------------------- Clinotement led --------------------------
+    millisActual = millis();
+    if(millisActual - intervalLed > millisPassLed){
+        millisPassLed = millisActual;
+        if(digitalRead(LED_PIN)){
+            digitalWrite(LED_PIN, LOW);
+        }
+        else{
+            digitalWrite(LED_PIN, HIGH);
+        }
     }
 }
