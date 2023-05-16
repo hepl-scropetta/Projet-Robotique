@@ -9,7 +9,7 @@
 #include <Audio.cpp>
 #include <Servo.h>
 
-#define interval 500
+#define interval 250
 uint16_t millisPass = 0;
 uint16_t millisActual = 0;
 uint16_t millisFirstZero = 0;
@@ -18,7 +18,7 @@ uint16_t millisPassLed = 0;
 uint16_t millisActualLed = 0;
 
 bool state_obs = 0 ;
-float distanceObstacle, distanceObstacle1, distanceObstacle2;
+float distanceObstacle = 0, distanceObstacle1, distanceObstacle2;
 bool obstacle_stop = false;
 uint16_t obstacle_stop_millis = 1000;
 uint8_t angle_read;
@@ -122,7 +122,7 @@ void loop ()
             while (true);
         }
         audio_Reverse();
-        delay(2000);
+        delay(1000);
         while(angle_demi < 5)
         {
             angle_demi = PID(get_angle());
@@ -185,11 +185,10 @@ void loop ()
         *ptr_percent = 75;
     }
 
-
     else if (distanceObstacle > 12 && distanceObstacle != -1){
         *ptr_percent = 45;
     }
-    else if (distanceObstacle != -1)
+    else if (distanceObstacle != -1 && distanceObstacle != 0)
     {
         *ptr_percent = 0;
         if(!obstacle_stop){
@@ -202,9 +201,9 @@ void loop ()
     //---------------------- Obstacle problem  --------------------------
     if(obstacle_stop){
         millisActual = millis();
-        if(millisActual - 2000 > obstacle_stop_millis){
+        if(millisActual - 1000 > obstacle_stop_millis){
             obstacle_stop_millis = millisActual;
-            audio_Obstacle();
+            //audio_Obstacle();
             obstacle_stop = false;
         }
     }
